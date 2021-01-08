@@ -13,7 +13,8 @@ import java.util.Properties;
 public class ConexaoDB {
 	
 	private static Connection conexaoDB = null;
-		
+	
+	//abrirConexao: na apostila está getConnection
 	public static Connection abrirConexao() {
 		if (conexaoDB == null) {
 			try {
