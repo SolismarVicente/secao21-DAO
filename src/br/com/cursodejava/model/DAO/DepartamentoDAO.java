@@ -1,4 +1,4 @@
-package br.com.cursodejava.model.entities.DAO;
+package br.com.cursodejava.model.DAO;
 
 import java.util.List;
 
