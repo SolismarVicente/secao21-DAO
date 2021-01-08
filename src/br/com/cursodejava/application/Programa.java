@@ -1,6 +1,9 @@
 package br.com.cursodejava.application;
 
+import java.util.Date;
+
 import br.com.cursodejava.model.entities.Departamento;
+import br.com.cursodejava.model.entities.Vendedor;
 
 public class Programa {
 
@@ -8,7 +11,10 @@ public class Programa {
 		
 		Departamento departamento = new Departamento(1, "Livros");
 		
+		Vendedor vendedor = new Vendedor(1, "Bob", "bob@gmail.com", new Date(), 3000.00, departamento);
+		
 		System.out.println(departamento);
+		System.out.println(vendedor);
 	}
 
 }
