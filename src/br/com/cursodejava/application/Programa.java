@@ -10,6 +10,8 @@ public class Programa {
 		
 		VendedorDAO vendedorDAO = FabricaDAO.createVendedorDAO();
 		
+		System.out.println("===Teste número 1: BuscarVendedorPorCodigo");
+		
 		Vendedor vendedor = vendedorDAO.buscarPorCodigo(3);
 		
 		System.out.println(vendedor);

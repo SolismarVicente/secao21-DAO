@@ -10,6 +10,7 @@ import java.sql.Statement;
 import java.util.Properties;
 
 //conectar com o banco de dados no jdbc é instanciar um objeto do tipo Connection
+//A Classe ConexaoDB está somente DB na apostila
 public class ConexaoDB {
 	
 	private static Connection conexaoDB = null;
@@ -42,6 +43,7 @@ public class ConexaoDB {
 		}
 	}
 	
+	//propriedadeConexao() na apostila está loadProperties()
 	private static Properties propriedadeConexao() {
 		try (FileInputStream fs = new FileInputStream("db.properties")) {
 			Properties propriedade = new Properties();

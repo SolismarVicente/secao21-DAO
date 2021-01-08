@@ -55,17 +55,9 @@ public class VendedorDAOJDBC implements VendedorDAO {
 			
 			//testar se a consulta teve resultado
 			if (rs.next()) {
-				Departamento departamento = new Departamento();
-				departamento.setCodigo(rs.getInt("b.Codigo"));
-				departamento.setNomeDepartamento(rs.getString("b.NomeDepartamento"));
+				Departamento departamento = instanciarDepartamento(rs);
 				
-				Vendedor vendedor = new Vendedor();
-				vendedor.setCodigo(rs.getInt("a.Codigo"));
-				vendedor.setNomeVendedor(rs.getString("a.NomeVendedor"));
-				vendedor.setEmailVendedor(rs.getString("a.Email"));
-				vendedor.setDataNascimento(rs.getDate("a.DataNascimento"));
-				vendedor.setSalarioBase(rs.getDouble("a.SalarioBase"));
-				vendedor.setDepartamento(departamento);
+				Vendedor vendedor = instanciarVendedor(rs, departamento);
 				
 				return vendedor;
 			}
@@ -76,6 +68,26 @@ public class VendedorDAOJDBC implements VendedorDAO {
 			ConexaoDB.fecharStatement(st);
 			ConexaoDB.fecharResultSet(rs);
 		}
+	}
+
+	private Vendedor instanciarVendedor(ResultSet rs, Departamento departamento) throws SQLException {
+		Vendedor vendedor = new Vendedor();
+		vendedor.setCodigo(rs.getInt("a.Codigo"));
+		vendedor.setNomeVendedor(rs.getString("a.NomeVendedor"));
+		vendedor.setEmailVendedor(rs.getString("a.Email"));
+		vendedor.setDataNascimento(rs.getDate("a.DataNascimento"));
+		vendedor.setSalarioBase(rs.getDouble("a.SalarioBase"));
+		vendedor.setDepartamento(departamento);
+		
+		return vendedor;
+	}
+
+	private Departamento instanciarDepartamento(ResultSet rs) throws SQLException {
+		Departamento departamento = new Departamento();
+		departamento.setCodigo(rs.getInt("b.Codigo"));
+		departamento.setNomeDepartamento(rs.getString("b.NomeDepartamento"));
+		
+		return departamento;
 	}
 
 	@Override
