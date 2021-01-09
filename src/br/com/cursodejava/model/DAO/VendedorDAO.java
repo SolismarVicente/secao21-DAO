@@ -12,6 +12,7 @@ public interface VendedorDAO {
 	public void ExcluirPorCodigo(Integer codigo);
 	public Vendedor buscarPorCodigo(Integer codigo);
 	public List<Vendedor> listarTodos();
+	//na apostila está findByDepartamento
 	public List<Vendedor> listarPorDepartamento(Departamento departamento);
 	
 }

@@ -25,6 +25,14 @@ public class Programa {
 		for (Vendedor vend : lista) {
 			System.out.println(vend);
 		}
+		
+		System.out.println("\n===Teste número 3: listarTodos");
+		
+		lista = vendedorDAO.listarTodos();
+		
+		for (Vendedor vend : lista) {
+			System.out.println(vend);
+		}
 	}
 
 }

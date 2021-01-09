@@ -44,12 +44,51 @@ public class VendedorDAOJDBC implements VendedorDAO {
 	}
 	
 	@Override
+	//Na apostila o método é findAll
 	public List<Vendedor> listarTodos() {
-		// TODO Auto-generated method stub
-		return null;
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		
+		try {
+			st = conexao.prepareStatement("Select a.codigo, a.NomeVendedor, a.Email, "
+					+ "a.DataNascimento, a.SalarioBase, a.DepartamentoCodigo, "
+					+ "b.codigo, b.NomeDepartamento from vendedor a, departamento b "
+					+ "WHERE (a.DepartamentoCodigo = b.codigo) "
+					+ "Order by a.NomeVendedor");
+			
+			//O ResultSet tráz o resultado em forma de tabela
+			rs = st.executeQuery();
+			
+			//testar se a consulta teve resultado
+			//o resultado da consulta acima pode dar 0, 1 ou mais valores
+			//por isto tenho que usar o while
+			
+			List<Vendedor> lista = new ArrayList<>();
+			Map<Integer, Departamento> map = new HashMap<>();
+			
+			while (rs.next()) {
+				Departamento dep = map.get(rs.getInt("a.DepartamentoCodigo"));
+				
+				if (dep == null) {
+					dep = instanciarDepartamento(rs);
+					map.put(rs.getInt("a.DepartamentoCodigo"), dep);
+				}
+								
+				Vendedor vendedor = instanciarVendedor(rs, dep);
+				
+				lista.add(vendedor);
+			}
+			return lista;
+		} catch (SQLException erro) {
+			throw new DBException(erro.getMessage()); 
+		} finally {
+			ConexaoDB.fecharStatement(st);
+			ConexaoDB.fecharResultSet(rs);
+		}
 	}
 	
 	@Override
+	//Na apostila está findByDepartamento
 	public List<Vendedor> listarPorDepartamento(Departamento departamento) {
 		PreparedStatement st = null;
 		ResultSet rs = null;
