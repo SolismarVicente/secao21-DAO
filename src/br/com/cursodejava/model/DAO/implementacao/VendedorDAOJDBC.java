@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.mysql.jdbc.Statement;
+
 import br.com.cursodejava.db.ConexaoDB;
 import br.com.cursodejava.db.DBException;
 import br.com.cursodejava.model.DAO.VendedorDAO;
@@ -25,11 +27,11 @@ public class VendedorDAOJDBC implements VendedorDAO {
 	
 	private Vendedor instanciarVendedor(ResultSet rs, Departamento departamento) throws SQLException {
 		Vendedor vendedor = new Vendedor();
-		vendedor.setCodigo(rs.getInt("a.Codigo"));
-		vendedor.setNomeVendedor(rs.getString("a.NomeVendedor"));
-		vendedor.setEmailVendedor(rs.getString("a.Email"));
-		vendedor.setDataNascimento(rs.getDate("a.DataNascimento"));
-		vendedor.setSalarioBase(rs.getDouble("a.SalarioBase"));
+		vendedor.setCodigo(rs.getInt("a.codigo"));
+		vendedor.setNomeVendedor(rs.getString("a.nomeVendedor"));
+		vendedor.setEmailVendedor(rs.getString("a.email"));
+		vendedor.setDataNascimento(rs.getDate("a.dataNascimento"));
+		vendedor.setSalarioBase(rs.getDouble("a.salarioBase"));
 		vendedor.setDepartamento(departamento);
 		
 		return vendedor;
@@ -38,7 +40,7 @@ public class VendedorDAOJDBC implements VendedorDAO {
 	private Departamento instanciarDepartamento(ResultSet rs) throws SQLException {
 		Departamento departamento = new Departamento();
 		departamento.setCodigo(rs.getInt("b.Codigo"));
-		departamento.setNomeDepartamento(rs.getString("b.NomeDepartamento"));
+		departamento.setNomeDepartamento(rs.getString("b.nomeDepartamento"));
 		
 		return departamento;
 	}
@@ -50,11 +52,11 @@ public class VendedorDAOJDBC implements VendedorDAO {
 		ResultSet rs = null;
 		
 		try {
-			st = conexao.prepareStatement("Select a.codigo, a.NomeVendedor, a.Email, "
-					+ "a.DataNascimento, a.SalarioBase, a.DepartamentoCodigo, "
-					+ "b.codigo, b.NomeDepartamento from vendedor a, departamento b "
-					+ "WHERE (a.DepartamentoCodigo = b.codigo) "
-					+ "Order by a.NomeVendedor");
+			st = conexao.prepareStatement("Select a.codigo, a.nomeVendedor, a.email, "
+					+ "a.dataNascimento, a.salarioBase, a.tbDepartamentoCodigo, "
+					+ "b.codigo, b.nomeDepartamento from tbVendedor a, tbDepartamento b "
+					+ "WHERE (a.tbDepartamentoCodigo = b.codigo) "
+					+ "Order by a.nomeVendedor");
 			
 			//O ResultSet tráz o resultado em forma de tabela
 			rs = st.executeQuery();
@@ -67,11 +69,11 @@ public class VendedorDAOJDBC implements VendedorDAO {
 			Map<Integer, Departamento> map = new HashMap<>();
 			
 			while (rs.next()) {
-				Departamento dep = map.get(rs.getInt("a.DepartamentoCodigo"));
+				Departamento dep = map.get(rs.getInt("a.tbDepartamentoCodigo"));
 				
 				if (dep == null) {
 					dep = instanciarDepartamento(rs);
-					map.put(rs.getInt("a.DepartamentoCodigo"), dep);
+					map.put(rs.getInt("a.tbDepartamentoCodigo"), dep);
 				}
 								
 				Vendedor vendedor = instanciarVendedor(rs, dep);
@@ -94,12 +96,12 @@ public class VendedorDAOJDBC implements VendedorDAO {
 		ResultSet rs = null;
 		
 		try {
-			st = conexao.prepareStatement("Select a.codigo, a.NomeVendedor, a.Email, "
-					+ "a.DataNascimento, a.SalarioBase, a.DepartamentoCodigo, "
-					+ "b.codigo, b.NomeDepartamento from vendedor a, departamento b "
-					+ "WHERE (a.DepartamentoCodigo = b.codigo) and "
-					+ "(a.DepartamentoCodigo = ?) "
-					+ "Order by b.NomeDepartamento");
+			st = conexao.prepareStatement("Select a.codigo, a.nomeVendedor, a.email, "
+					+ "a.dataNascimento, a.salarioBase, a.tbDepartamentoCodigo, "
+					+ "b.codigo, b.nomeDepartamento from tbVendedor a, tbDepartamento b "
+					+ "WHERE (a.tbDepartamentoCodigo = b.codigo) and "
+					+ "(a.tbDepartamentoCodigo = ?) "
+					+ "Order by b.nomeDepartamento");
 			st.setInt(1, departamento.getCodigo());
 			//O ResultSet tráz o resultado em forma de tabela
 			rs = st.executeQuery();
@@ -113,11 +115,11 @@ public class VendedorDAOJDBC implements VendedorDAO {
 			
 			
 			while (rs.next()) {
-				Departamento dep = map.get(rs.getInt("a.DepartamentoCodigo"));
+				Departamento dep = map.get(rs.getInt("a.tbDepartamentoCodigo"));
 				
 				if (dep == null) {
 					dep = instanciarDepartamento(rs);
-					map.put(rs.getInt("a.DepartamentoCodigo"), dep);
+					map.put(rs.getInt("a.tbDepartamentoCodigo"), dep);
 				}
 								
 				Vendedor vendedor = instanciarVendedor(rs, dep);
@@ -139,10 +141,10 @@ public class VendedorDAOJDBC implements VendedorDAO {
 		ResultSet rs = null;
 		
 		try {
-			st = conexao.prepareStatement("Select a.codigo, a.NomeVendedor, a.Email, "
-					+ "a.DataNascimento, a.SalarioBase, a.DepartamentoCodigo, "
-					+ "b.codigo, b.NomeDepartamento from vendedor a, departamento b "
-					+ "WHERE (a.DepartamentoCodigo = b.codigo) and "
+			st = conexao.prepareStatement("Select a.codigo, a.nomeVendedor, a.email, "
+					+ "a.dataNascimento, a.salarioBase, a.tbDepartamentoCodigo, "
+					+ "b.codigo, b.nomeDepartamento from tbVendedor a, tbDepartamento b "
+					+ "WHERE (a.tbDepartamentoCodigo = b.codigo) and "
 					+ "(a.codigo = ?)");
 			st.setInt(1, codigo);
 			//O ResultSet tráz o resultado em forma de tabela
@@ -168,7 +170,39 @@ public class VendedorDAOJDBC implements VendedorDAO {
 	
 	@Override
 	public void inserir(Vendedor vendedor) {
-		// TODO Auto-generated method stub
+
+		PreparedStatement st = null;
+		try {
+			st = conexao.prepareStatement(
+					"INSERT INTO tbvendedor "
+					+ "(nomeVendedor, email, dataNascimento, salarioBase, tbDepartamentoCodigo) "
+					+ "VALUES "
+					+ "(?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+			st.setString(1, vendedor.getNomeVendedor());
+			st.setString(2, vendedor.getEmailVendedor());
+			st.setDate(3, new java.sql.Date(vendedor.getDataNascimento().getTime()));
+			st.setDouble(4, vendedor.getSalarioBase());
+			st.setInt(5, vendedor.getDepartamento().getCodigo());
+			
+			int qtdeLinhas = st.executeUpdate();
+			
+			if (qtdeLinhas > 0) {
+				ResultSet rs = st.getGeneratedKeys();
+				
+				if (rs.next()) {
+					int codigoVendedor = rs.getInt(1);
+					vendedor.setCodigo(codigoVendedor);
+				}
+				
+				ConexaoDB.fecharResultSet(rs);
+			} else { //caso não tem feito a inserção
+				throw new DBException("Inserção não realizada.");
+			}
+		} catch (SQLException erro) {
+			throw new DBException(erro.getMessage());
+		} finally {
+			ConexaoDB.fecharStatement(st);
+		}
 		
 	}
 
