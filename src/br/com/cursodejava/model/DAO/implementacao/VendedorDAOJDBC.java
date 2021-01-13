@@ -232,9 +232,25 @@ public class VendedorDAOJDBC implements VendedorDAO {
 	}
 
 	@Override
-	public void ExcluirPorCodigo(Integer codigo) {
-		// TODO Auto-generated method stub
+	public void ExcluirPorCodigo(Integer codigoVendedor) {
 		
+		PreparedStatement st = null;
+		try {
+			st = conexao.prepareStatement(
+					"DELETE from tbvendedor "
+					+ "WHERE codigo = ?");
+			st.setInt(1, codigoVendedor);
+					
+			int qtdeLinhas = st.executeUpdate();
+			
+			if (qtdeLinhas == 0) {
+				throw new DBException("Código de Vendedor não encontrado.");
+			}
+		} catch (SQLException erro) {
+			throw new DBException(erro.getMessage());
+		} finally {
+			ConexaoDB.fecharStatement(st);
+		}
 	}
 
 
