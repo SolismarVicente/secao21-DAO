@@ -208,8 +208,27 @@ public class VendedorDAOJDBC implements VendedorDAO {
 
 	@Override
 	public void alterar(Vendedor vendedor) {
-		// TODO Auto-generated method stub
 		
+		PreparedStatement st = null;
+		try {
+			st = conexao.prepareStatement(
+					"UPDATE tbvendedor "
+					+ "SET nomeVendedor = ?, email = ?, dataNascimento = ?, "
+					+ "salarioBase = ?, tbDepartamentoCodigo = ? "
+					+ "WHERE codigo = ?");
+			st.setString(1, vendedor.getNomeVendedor());
+			st.setString(2, vendedor.getEmailVendedor());
+			st.setDate(3, new java.sql.Date(vendedor.getDataNascimento().getTime()));
+			st.setDouble(4, vendedor.getSalarioBase());
+			st.setInt(5, vendedor.getDepartamento().getCodigo());
+			st.setInt(6, vendedor.getCodigo());
+			
+			st.executeUpdate();
+		} catch (SQLException erro) {
+			throw new DBException(erro.getMessage());
+		} finally {
+			ConexaoDB.fecharStatement(st);
+		}
 	}
 
 	@Override

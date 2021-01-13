@@ -35,12 +35,18 @@ public class Programa {
 			System.out.println(vendedor3);
 		}
 		
-		
-		System.out.println("\n===Teste número 4: InserirVendedor");
+		System.out.println("\n===Teste número 4: inserirVendedor");
 		
 		Vendedor vendedor4 = new Vendedor(null, "Greg", "greg@gmail.com", new Date(), 4000.00, departamento);
 		vendedorDAO.inserir(vendedor4);
 		System.out.println("Vendedor inserido! Código: " + vendedor4.getCodigo());
+		
+		System.out.println("\n===Teste número 5: alterarVendedor");
+		
+		Vendedor vendedor5 = vendedorDAO.buscarPorCodigo(1);
+		vendedor5.setNomeVendedor("Martha Waine");
+		vendedorDAO.alterar(vendedor5);
+		System.out.println("Vendedor Alterado! Código: " + vendedor5.getNomeVendedor());
 		
 	}
 
